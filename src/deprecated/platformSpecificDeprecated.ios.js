@@ -607,13 +607,14 @@ function dismissContextualMenu() {
   // Android only
 }
 
+let _isTouchable = true;
+
 function setTouchable(value) {
-  // Android only
+  _isTouchable = value;
 }
 
 function isTouchable() {
-  // Android only
-  return true;
+  return _isTouchable;
 }
 
 export default {

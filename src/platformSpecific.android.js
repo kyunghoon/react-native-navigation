@@ -173,12 +173,14 @@ function setScreenStyle(screenInstanceId, style) {
   NativeReactModule.setScreenStyle(screenInstanceId, style);
 }
 
+let _isTouchable = true;
+
 function setTouchable(value) {
-  NativeReactModule.setTouchable(value);
+  _isTouchable = value;
 }
 
 function isTouchable() {
-  return NativeReactModule.isTouchable();
+  return _isTouchable;
 }
 
 module.exports = {

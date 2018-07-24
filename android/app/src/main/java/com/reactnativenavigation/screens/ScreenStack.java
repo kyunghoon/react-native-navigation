@@ -57,7 +57,7 @@ public class ScreenStack {
 
     public void newStack(final ScreenParams params, LayoutParams layoutParams) {
         final Screen nextScreen = ScreenFactory.create(activity, params, leftButtonOnClickListener);
-        final Screen previousScreen = stack.peek();
+        final Screen previousScreen = stack.empty() ? null : stack.peek();
         if (isStackVisible) {
             pushScreenToVisibleStack(layoutParams, nextScreen, previousScreen, new Screen.OnDisplayListener() {
                 @Override
@@ -83,14 +83,18 @@ public class ScreenStack {
     public void pushInitialScreenWithAnimation(final ScreenParams initialScreenParams, LayoutParams params) {
         isStackVisible = true;
         pushInitialScreen(initialScreenParams, params);
-        final Screen screen = stack.peek();
-        screen.setOnDisplayListener(new Screen.OnDisplayListener() {
-            @Override
-            public void onDisplay() {
-                screen.show(initialScreenParams.animateScreenTransitions);
-                screen.setStyle();
-            }
-        });
+        if (stack.empty()) {
+          Log.w(TAG, "Can't push initial screen with animation, reason: stack is empty");
+        } else {
+          final Screen screen = stack.peek();
+          screen.setOnDisplayListener(new Screen.OnDisplayListener() {
+              @Override
+              public void onDisplay() {
+                  screen.show(initialScreenParams.animateScreenTransitions);
+                  screen.setStyle();
+              }
+          });
+        }
     }
 
     public void pushInitialScreen(ScreenParams initialScreenParams, LayoutParams params) {
@@ -133,7 +137,8 @@ public class ScreenStack {
                                           @Nullable final Screen.OnDisplayListener onDisplay) {
         nextScreen.setVisibility(View.INVISIBLE);
         addScreen(nextScreen, layoutParams);
-        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willDisappear", previousScreen.getNavigatorEventId());
+        if (previousScreen != null)
+          NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("willDisappear", previousScreen.getNavigatorEventId());
         nextScreen.setOnDisplayListener(new Screen.OnDisplayListener() {
             @Override
             public void onDisplay() {
@@ -141,7 +146,8 @@ public class ScreenStack {
                     @Override
                     public void run() {
                         if (onDisplay != null) onDisplay.onDisplay();
-                        NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didDisappear", previousScreen.getNavigatorEventId());
+                        if (previousScreen != null)
+                          NavigationApplication.instance.getEventEmitter().sendScreenChangedEvent("didDisappear", previousScreen.getNavigatorEventId());
                         parent.removeView(previousScreen);
                     }
                 });
@@ -168,7 +174,8 @@ public class ScreenStack {
     private void pushScreenToInvisibleStack(LayoutParams layoutParams, Screen nextScreen, Screen previousScreen) {
         nextScreen.setVisibility(View.INVISIBLE);
         addScreen(nextScreen, layoutParams);
-        parent.removeView(previousScreen);
+        if (previousScreen != null)
+          parent.removeView(previousScreen);
     }
 
     private void addScreen(Screen screen, LayoutParams layoutParams) {

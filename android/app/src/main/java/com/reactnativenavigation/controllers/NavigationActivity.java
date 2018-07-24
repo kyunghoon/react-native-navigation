@@ -53,23 +53,23 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
      * This is somewhat weird, and in the future we better use a single activity with changing contentView similar to ReactNative impl.
      * Along with that, we should handle commands from the bridge using onNewIntent
      */
-    private static boolean touchEnabled = true;
+    //private static boolean touchEnabled = true;
 
-    public static boolean isTouchable() { return NavigationActivity.touchEnabled; }
-    public static void setIsTouchable(boolean value) {
-        if (NavigationActivity.touchEnabled == value) return;
-        NavigationActivity.touchEnabled = value;
-    }
+    //public static boolean isTouchable() { return NavigationActivity.touchEnabled; }
+    //public static void setIsTouchable(boolean value) {
+        //if (NavigationActivity.touchEnabled == value) return;
+        //NavigationActivity.touchEnabled = value;
+    //}
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (!NavigationActivity.touchEnabled) return true;
+        //if (!NavigationActivity.touchEnabled) return true;
         else return super.dispatchTouchEvent(ev);
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (!NavigationActivity.touchEnabled) return true;
+        //if (!NavigationActivity.touchEnabled) return true;
         else return super.dispatchKeyEvent(event);
     }
 
