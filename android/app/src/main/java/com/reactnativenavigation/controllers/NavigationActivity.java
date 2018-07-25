@@ -63,14 +63,14 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        //if (!NavigationActivity.touchEnabled) return true;
-        else return super.dispatchTouchEvent(ev);
+        //if (!NavigationActivity.touchEnabled) return true; else
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        //if (!NavigationActivity.touchEnabled) return true;
-        else return super.dispatchKeyEvent(event);
+        //if (!NavigationActivity.touchEnabled) return true; else
+        return super.dispatchKeyEvent(event);
     }
 
     static NavigationActivity currentActivity;
